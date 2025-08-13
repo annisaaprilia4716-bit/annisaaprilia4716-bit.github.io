@@ -1,0 +1,687 @@
+# Create project structure and files, then zip them for the user
+import os, json, zipfile, textwrap, pathlib
+
+project_dir = "/mnt/data/annisa-dress-site"
+assets_dir = os.path.join(project_dir, "assets")
+os.makedirs(assets_dir, exist_ok=True)
+
+index_html = """<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Annisa Dress — Koleksi Dress Kekinian</title>
+  <meta name="description" content="Annisa Dress: koleksi dress kekinian, elegan & sopan dengan nuansa pastel.">
+  <link rel="preconnect" href="https://images.unsplash.com" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>👗</text></svg>">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#"><span>Annisa</span> Dress</a>
+      <nav class="nav">
+        <a href="#koleksi">Koleksi</a>
+        <a href="#tentang">Tentang</a>
+        <a href="#kontak">Kontak</a>
+      </nav>
+      <button id="btnCart" class="cart-btn" aria-label="Buka Keranjang">
+        <span class="icon">🛒</span>
+        <span id="cartCount" class="count-badge">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Slider -->
+  <section class="hero">
+    <div class="slider" aria-roledescription="carousel">
+      <div class="slides" id="slides">
+        <div class="slide is-active" style="--bg:url('https://images.unsplash.com/photo-1549366021-9f761d450615?q=80&w=1600&auto=format&fit=crop');">
+          <div class="slide-content">
+            <h1>Dress Kekinian • Elegan & Sopan</h1>
+            <p>Nuansa pink & hijau pastel, nyaman dipakai harian hingga acara spesial.</p>
+            <a class="btn-primary" href="#koleksi">Lihat Koleksi</a>
+          </div>
+        </div>
+        <div class="slide" style="--bg:url('https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1600&auto=format&fit=crop');">
+          <div class="slide-content">
+            <h1>Kualitas Premium</h1>
+            <p>Bahan adem, potongan rapi, dan detail yang manis.</p>
+            <a class="btn-primary" href="#koleksi">Belanja Sekarang</a>
+          </div>
+        </div>
+        <div class="slide" style="--bg:url('https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?q=80&w=1600&auto=format&fit=crop');">
+          <div class="slide-content">
+            <h1>Annisa Dress</h1>
+            <p>Toko resmi milik Anda — tampil percaya diri setiap hari.</p>
+            <a class="btn-primary" href="#koleksi">Mulai</a>
+          </div>
+        </div>
+      </div>
+      <div class="slider-controls">
+        <button id="prevSlide" aria-label="Sebelumnya">‹</button>
+        <div id="dots" class="dots" aria-label="Navigasi slide"></div>
+        <button id="nextSlide" aria-label="Berikutnya">›</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Koleksi -->
+  <section id="koleksi" class="section container">
+    <header class="section-head">
+      <h2>Koleksi Terbaru</h2>
+      <p>Dress pastel kekinian pilihan terbaik untukmu.</p>
+      <div class="filters">
+        <input id="searchInput" type="search" placeholder="Cari model / warna..." />
+        <select id="sortSelect" aria-label="Urutkan">
+          <option value="recommended">Rekomendasi</option>
+          <option value="price-asc">Harga: termurah</option>
+          <option value="price-desc">Harga: termahal</option>
+          <option value="name-asc">Nama: A–Z</option>
+          <option value="name-desc">Nama: Z–A</option>
+        </select>
+      </div>
+    </header>
+    <div id="productGrid" class="grid"></div>
+  </section>
+
+  <!-- Tentang -->
+  <section id="tentang" class="section about">
+    <div class="container about-inner">
+      <div class="about-text">
+        <h2>Tentang Annisa Dress</h2>
+        <p>Annisa Dress adalah butik online dengan kurasi dress elegan & sopan bergaya kekinian. Kami mengutamakan bahan nyaman, cutting rapi, dan warna pastel yang menenangkan.</p>
+        <ul>
+          <li>✦ Desain modern, tampilan anggun</li>
+          <li>✦ Bahan adem & tahan lama</li>
+          <li>✦ Pengiriman cepat & aman</li>
+        </ul>
+      </div>
+      <div class="about-card">
+        <h3>Promo Spesial</h3>
+        <p>Diskon 10% untuk pembelian pertama. Gunakan kode: <strong>ANNISA10</strong></p>
+        <a class="btn-outline" href="#koleksi">Belanja Sekarang</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Kontak -->
+  <section id="kontak" class="section contact container">
+    <h2>Kontak</h2>
+    <p>Butuh bantuan? Hubungi kami via WhatsApp atau email, tim kami siap membantu.</p>
+    <div class="contact-actions">
+      <a class="btn-primary" href="https://wa.me/6281234567890" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn-outline" href="mailto:halo@annisa-dress.example">Email</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Annisa Dress — Semua Hak Dilindungi.</p>
+      <a class="btn-ghost" href="checkout.html">Checkout</a>
+    </div>
+  </footer>
+
+  <!-- Keranjang Drawer -->
+  <aside id="cartDrawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-header">
+      <h3>Keranjang</h3>
+      <button id="closeCart" aria-label="Tutup">✕</button>
+    </div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-bottom">
+      <div class="cart-total"><span>Subtotal</span><strong id="cartSubtotal">Rp0</strong></div>
+      <div class="cart-actions">
+        <a class="btn-outline" href="checkout.html">Checkout</a>
+        <button id="clearCart" class="btn-ghost">Bersihkan</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Overlay -->
+  <div id="overlay" class="overlay" hidden></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+"""
+
+checkout_html = """<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout — Annisa Dress</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="checkout-page">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html"><span>Annisa</span> Dress</a>
+      <nav class="nav">
+        <a href="index.html#koleksi">Koleksi</a>
+        <a href="index.html#tentang">Tentang</a>
+        <a href="index.html#kontak">Kontak</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section container checkout-grid">
+    <section class="checkout-left">
+      <h1>Checkout</h1>
+      <form id="checkoutForm" class="checkout-form">
+        <label>Nama Lengkap
+          <input required type="text" name="name" placeholder="Nama penerima">
+        </label>
+        <label>No. HP/WhatsApp
+          <input required type="tel" name="phone" placeholder="08xxxxxxxxxx">
+        </label>
+        <label>Alamat Lengkap
+          <textarea required name="address" rows="4" placeholder="Jalan, RT/RW, Kel/Desa, Kec, Kota/Kab, Provinsi, Kode Pos"></textarea>
+        </label>
+        <label>Metode Pembayaran
+          <select name="payment" required>
+            <option value="transfer">Transfer Bank</option>
+            <option value="ewallet">E-Wallet</option>
+            <option value="cod">COD (Bayar di Tempat)</option>
+          </select>
+        </label>
+        <button class="btn-primary" type="submit">Buat Pesanan</button>
+      </form>
+      <p class="muted">* Setelah mengirim, ringkasan pesanan akan ditampilkan dan bisa diunduh.</p>
+    </section>
+
+    <aside class="checkout-right">
+      <h2>Ringkasan Pesanan</h2>
+      <div id="summaryItems" class="summary-items"></div>
+      <div class="cart-total"><span>Subtotal</span><strong id="summarySubtotal">Rp0</strong></div>
+      <div class="cart-total"><span>Diskon</span><strong id="summaryDiscount">Rp0</strong></div>
+      <div class="cart-total grand"><span>Total</span><strong id="summaryTotal">Rp0</strong></div>
+    </aside>
+  </main>
+
+  <section id="orderResult" class="section container order-result" hidden>
+    <h2>Terima kasih! 🎉</h2>
+    <p>Pesanan Anda sudah kami terima. Kami akan menghubungi via WhatsApp untuk konfirmasi pembayaran & pengiriman.</p>
+    <a id="downloadOrder" class="btn-outline" href="#" download>Unduh Ringkasan (JSON)</a>
+    <a class="btn-primary" href="index.html">Kembali ke Beranda</a>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Annisa Dress.</p>
+    </div>
+  </footer>
+
+  <script src="checkout.js"></script>
+</body>
+</html>
+"""
+
+styles_css = """/* ==========
+  Annisa Dress — Styles
+  Theme: Pink Pastel & Hijau Pastel
+========== */
+:root{
+  --pink:#ffd1dc;
+  --pink-2:#ffc2d1;
+  --green:#c7f2d8;
+  --green-2:#aee6c5;
+  --text:#2b2b2b;
+  --muted:#6b7280;
+  --bg:#fff7fb;
+  --shadow:0 10px 30px rgba(0,0,0,.08);
+  --radius:1.25rem;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  color:var(--text);
+  background:linear-gradient(180deg,var(--bg),#ffffff);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+.container{width:min(1100px,92%);margin-inline:auto}
+.section{padding:64px 0}
+.section-head{display:grid;gap:12px;margin-bottom:22px}
+.section-head h2{margin:0;font-size:clamp(1.6rem,1.2rem+1.6vw,2.6rem)}
+.section-head p{color:var(--muted);margin:0}
+.btn-primary,.btn-outline,.btn-ghost{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:12px 18px;border-radius:999px;border:2px solid transparent;
+  cursor:pointer;text-decoration:none;font-weight:700;transition:.2s transform,.2s box-shadow,.2s background;
+}
+.btn-primary{background:linear-gradient(135deg,var(--pink-2),var(--green));box-shadow:var(--shadow)}
+.btn-primary:hover{transform:translateY(-2px)}
+.btn-outline{border-color:var(--pink-2);color:var(--text);background:#fff}
+.btn-outline:hover{background:var(--pink)}
+.btn-ghost{background:transparent;border-color:transparent}
+.btn-ghost:hover{background:#f3f4f6}
+
+/* Header */
+.site-header{position:sticky;top:0;background:rgba(255,255,255,.7);backdrop-filter:blur(8px);z-index:20;border-bottom:1px solid #ffe6ee}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+.brand{font-weight:900;font-size:1.4rem;text-decoration:none;color:var(--text)}
+.brand span{color:#f05192}
+.nav{display:flex;gap:18px}
+.nav a{color:var(--text);text-decoration:none;font-weight:600;border-bottom:2px solid transparent;padding-bottom:4px}
+.nav a:hover{border-color:var(--green-2)}
+.cart-btn{position:relative;border:none;background:linear-gradient(135deg,var(--green),var(--pink));padding:10px 14px;border-radius:999px;box-shadow:var(--shadow);cursor:pointer}
+.cart-btn .icon{font-size:1.1rem}
+.count-badge{position:absolute;top:-8px;right:-6px;background:#ff4d6d;color:white;border-radius:999px;font-size:.75rem;padding:2px 6px}
+
+/* Hero Slider */
+.hero{padding-top:0}
+.slider{position:relative;height:64vh;min-height:420px;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-top:12px}
+.slides{height:100%;display:grid;grid-auto-flow:column;grid-auto-columns:100%;transition:transform .6s ease}
+.slide{position:relative;display:flex;align-items:center;justify-content:flex-start;background-size:cover;background-position:center;isolation:isolate}
+.slide::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,209,220,.75),rgba(199,242,216,.6));z-index:0}
+.slide{background-image:var(--bg)}
+.slide-content{position:relative;z-index:1;padding:clamp(18px,2vw,32px);max-width:min(560px,90%);margin-left:clamp(12px,5vw,60px);animation:floatIn .8s ease both}
+.slide-content h1{margin:0 0 8px 0;font-size:clamp(1.8rem,1.2rem+1.6vw,2.8rem);line-height:1.2}
+.slide-content p{margin:0 0 16px 0;color:#3b3b3b}
+.slider-controls{position:absolute;inset:auto 0 12px 0;display:flex;align-items:center;justify-content:center;gap:10px;z-index:2}
+.slider-controls button{border:none;background:#ffffffb8;border-radius:999px;padding:8px 14px;cursor:pointer;font-size:1.2rem;box-shadow:var(--shadow)}
+.dots{display:flex;gap:8px}
+.dots button{width:10px;height:10px;border-radius:999px;border:none;background:#ffffffb8;cursor:pointer}
+.dots button.active{background:#f05192}
+
+/* Filters */
+.filters{display:flex;gap:12px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.filters input,.filters select{
+  padding:10px 12px;border-radius:999px;border:1px solid #ffdbe6;background:#fff;box-shadow:var(--shadow);
+}
+
+/* Product Grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;margin-top:18px}
+.card{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transform:translateY(8px);opacity:0;transition:.6s transform, .6s opacity}
+.card.visible{transform:translateY(0);opacity:1}
+.card figure{aspect-ratio:4/5;overflow:hidden}
+.card img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.card:hover img{transform:scale(1.05)}
+.card .info{padding:14px}
+.card .title{font-weight:800;margin:2px 0}
+.card .meta{color:var(--muted);font-size:.9rem;margin:0 0 10px}
+.price{font-weight:900}
+.add-btn{width:100%;margin-top:10px}
+
+/* About */
+.about{background:linear-gradient(180deg,#fff,var(--green),#fff)}
+.about-inner{display:grid;grid-template-columns:1.2fr .8fr;gap:22px;align-items:center}
+.about-text ul{margin:8px 0 0 0;padding-left:18px}
+.about-card{background:linear-gradient(135deg,var(--pink-2),var(--green));padding:22px;border-radius:var(--radius);box-shadow:var(--shadow)}
+
+/* Contact */
+.contact .contact-actions{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+
+/* Footer */
+.site-footer{border-top:1px solid #ffe6ee;margin-top:42px}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+
+/* Cart Drawer */
+.cart-drawer{position:fixed;top:0;right:-420px;width:min(92vw,380px);height:100dvh;background:#fff;border-left:1px solid #ffe6ee;box-shadow:var(--shadow);z-index:30;display:flex;flex-direction:column;transition:right .35s ease}
+.cart-drawer.open{right:0}
+.cart-header{display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:1px solid #ffe6ee}
+.cart-items{padding:10px;flex:1;overflow:auto;display:grid;gap:10px}
+.cart-item{display:grid;grid-template-columns:64px 1fr auto;gap:10px;align-items:center;padding:8px;border:1px solid #fff0f6;border-radius:12px}
+.cart-item figure{width:64px;height:64px;border-radius:10px;overflow:hidden}
+.qty{display:flex;align-items:center;gap:6px}
+.qty button{border:none;background:#f3f4f6;border-radius:8px;padding:6px 10px;cursor:pointer}
+.cart-bottom{border-top:1px solid #ffe6ee;padding:12px;display:grid;gap:10px}
+.cart-total{display:flex;align-items:center;justify-content:space-between}
+.cart-total.grand strong{font-size:1.2rem}
+.cart-actions{display:flex;gap:10px}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:25;}
+
+/* Checkout */
+.checkout-page .checkout-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:24px}
+.checkout-form{display:grid;gap:12px}
+.checkout-form input,.checkout-form textarea,.checkout-form select{
+  width:100%;padding:12px;border-radius:12px;border:1px solid #ffdbe6;background:#fff;
+}
+.summary-items{display:grid;gap:10px}
+.summary-item{display:grid;grid-template-columns:64px 1fr auto;gap:10px;align-items:center;padding:8px;border:1px solid #fff0f6;border-radius:12px}
+
+/* Animation */
+@keyframes floatIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* Responsive */
+@media (max-width:920px){
+  .about-inner,.checkout-page .checkout-grid{grid-template-columns:1fr}
+  .slider{height:56vh}
+}
+"""
+
+script_js = """// Annisa Dress — Interaktif
+const $ = (s, p=document) => p.querySelector(s);
+const $$ = (s, p=document) => [...p.querySelectorAll(s)];
+
+const state = {
+  products: [
+    {
+      id: 'A01',
+      name: 'Dress Aulia Pastel Pink',
+      color: 'Pink Pastel',
+      price: 279000,
+      img: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1200&auto=format&fit=crop'
+    },
+    {
+      id: 'A02',
+      name: 'Dress Naya Sage',
+      color: 'Hijau Pastel',
+      price: 299000,
+      img: 'https://images.unsplash.com/photo-1542060748-10c28b62716a?q=80&w=1200&auto=format&fit=crop'
+    },
+    {
+      id: 'A03',
+      name: 'Dress Safa Blush',
+      color: 'Pink Pastel',
+      price: 259000,
+      img: 'https://images.unsplash.com/photo-1520975922284-7b68346aefab?q=80&w=1200&auto=format&fit=crop'
+    },
+    {
+      id: 'A04',
+      name: 'Dress Hana Mint',
+      color: 'Hijau Pastel',
+      price: 309000,
+      img: 'https://images.unsplash.com/photo-1542060748-10c28b62716a?q=80&w=1200&auto=format&fit=crop'
+    },
+    {
+      id: 'A05',
+      name: 'Dress Zahra Lilac-Pink',
+      color: 'Pink Pastel',
+      price: 289000,
+      img: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop'
+    },
+    {
+      id: 'A06',
+      name: 'Dress Khayla Pistachio',
+      color: 'Hijau Pastel',
+      price: 279000,
+      img: 'https://images.unsplash.com/photo-1520975979643-6a76a1a08cb0?q=80&w=1200&auto=format&fit=crop'
+    }
+  ],
+  cart: []
+};
+
+// Utils
+const rupiah = n => n.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 });
+const saveCart = () => localStorage.setItem('annisa_cart', JSON.stringify(state.cart));
+const loadCart = () => {
+  try { state.cart = JSON.parse(localStorage.getItem('annisa_cart')) || []; } catch { state.cart = []; }
+};
+
+function renderProducts(list){
+  const grid = $('#productGrid');
+  grid.innerHTML = '';
+  list.forEach((p,i)=>{
+    const el = document.createElement('article');
+    el.className = 'card';
+    el.style.animationDelay = (i*60)+'ms';
+    el.innerHTML = `
+      <figure><img src="${p.img}" alt="${p.name}" loading="lazy"></figure>
+      <div class="info">
+        <div class="title">${p.name}</div>
+        <p class="meta">${p.color}</p>
+        <div class="price">${rupiah(p.price)}</div>
+        <button class="btn-primary add-btn" data-id="${p.id}">+ Keranjang</button>
+      </div>`;
+    grid.appendChild(el);
+  });
+
+  // reveal on scroll
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, {threshold:.15});
+  $$('.card').forEach(c=>io.observe(c));
+
+  // bind add
+  $$('.add-btn').forEach(btn=>btn.addEventListener('click',()=>{
+    addToCart(btn.dataset.id);
+    pulse($('#btnCart'));
+  }));
+}
+
+function addToCart(id){
+  const found = state.cart.find(i=>i.id===id);
+  if(found){ found.qty += 1; }
+  else{
+    const p = state.products.find(p=>p.id===id);
+    state.cart.push({ id:p.id, name:p.name, price:p.price, img:p.img, qty:1 });
+  }
+  saveCart();
+  renderCart();
+}
+
+function changeQty(id, delta){
+  const item = state.cart.find(i=>i.id===id);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty<=0){
+    state.cart = state.cart.filter(i=>i.id!==id);
+  }
+  saveCart();
+  renderCart();
+}
+
+function clearCart(){
+  state.cart = [];
+  saveCart();
+  renderCart();
+}
+
+function cartSubtotal(){
+  return state.cart.reduce((s,i)=> s + i.price*i.qty, 0);
+}
+
+function renderCart(){
+  $('#cartCount').textContent = state.cart.reduce((s,i)=>s+i.qty,0);
+  $('#cartItems').innerHTML = state.cart.length ? '' : '<p class="muted" style="padding:12px">Keranjang masih kosong.</p>';
+  state.cart.forEach(i=>{
+    const row = document.createElement('div');
+    row.className = 'cart-item';
+    row.innerHTML = `
+      <figure><img src="${i.img}" alt="${i.name}"></figure>
+      <div>
+        <div style="font-weight:700">${i.name}</div>
+        <div class="muted">${rupiah(i.price)}</div>
+        <div class="qty">
+          <button aria-label="Kurangi" data-id="${i.id}" data-act="-">−</button>
+          <strong>${i.qty}</strong>
+          <button aria-label="Tambah" data-id="${i.id}" data-act="+">+</button>
+          <button aria-label="Hapus" data-id="${i.id}" data-act="x" style="margin-left:8px">🗑️</button>
+        </div>
+      </div>
+      <div style="font-weight:800">${rupiah(i.price*i.qty)}</div>`;
+    $('#cartItems').appendChild(row);
+  });
+  $('#cartSubtotal').textContent = rupiah(cartSubtotal());
+}
+
+function pulse(el){
+  el.animate([{transform:'scale(1)'},{transform:'scale(1.06)'},{transform:'scale(1)'}],{duration:350});
+}
+
+// Filters & sorting
+function applyFilters(){
+  const q = $('#searchInput').value.toLowerCase();
+  const sort = $('#sortSelect').value;
+  let list = state.products.filter(p => (p.name.toLowerCase().includes(q) || p.color.toLowerCase().includes(q)));
+  switch(sort){
+    case 'price-asc': list.sort((a,b)=>a.price-b.price); break;
+    case 'price-desc': list.sort((a,b)=>b.price-a.price); break;
+    case 'name-asc': list.sort((a,b)=>a.name.localeCompare(b.name)); break;
+    case 'name-desc': list.sort((a,b)=>b.name.localeCompare(a.name)); break;
+    default: /* recommended */ break;
+  }
+  renderProducts(list);
+}
+
+// Slider
+let current = 0, autoTimer=null;
+function goTo(index){
+  const slides = $$('#slides .slide');
+  current = (index + slides.length) % slides.length;
+  $('#slides').style.transform = `translateX(-${current*100}%)`;
+  $$('#dots button').forEach((d,i)=>d.classList.toggle('active', i===current));
+}
+function next(){ goTo(current+1); }
+function prev(){ goTo(current-1); }
+function startAuto(){
+  stopAuto();
+  autoTimer = setInterval(next, 4500);
+}
+function stopAuto(){
+  if(autoTimer){ clearInterval(autoTimer); autoTimer=null; }
+}
+function buildDots(){
+  const slides = $$('#slides .slide');
+  const dots = $('#dots');
+  dots.innerHTML = '';
+  slides.forEach((_,i)=>{
+    const b = document.createElement('button');
+    b.addEventListener('click',()=>{ goTo(i); startAuto(); });
+    if(i===0) b.classList.add('active');
+    dots.appendChild(b);
+  });
+}
+
+// Drawer & overlay
+function openCart(){ $('#cartDrawer').classList.add('open'); $('#overlay').hidden=false; }
+function closeCart(){ $('#cartDrawer').classList.remove('open'); $('#overlay').hidden=true; }
+
+// Init
+window.addEventListener('DOMContentLoaded',()=>{
+  $('#year').textContent = new Date().getFullYear();
+  buildDots();
+  startAuto();
+
+  $('#nextSlide').addEventListener('click', ()=>{ next(); startAuto(); });
+  $('#prevSlide').addEventListener('click', ()=>{ prev(); startAuto(); });
+
+  // Pause on hover
+  $('.slider').addEventListener('mouseenter', stopAuto);
+  $('.slider').addEventListener('mouseleave', startAuto);
+
+  // Products
+  renderProducts(state.products);
+  $('#searchInput').addEventListener('input', applyFilters);
+  $('#sortSelect').addEventListener('change', applyFilters);
+
+  // Cart
+  loadCart();
+  renderCart();
+  $('#btnCart').addEventListener('click', openCart);
+  $('#closeCart').addEventListener('click', closeCart);
+  $('#overlay').addEventListener('click', closeCart);
+  $('#clearCart').addEventListener('click', clearCart);
+  $('#cartItems').addEventListener('click', (e)=>{
+    const btn = e.target.closest('button'); if(!btn) return;
+    const id = btn.dataset.id, act = btn.dataset.act;
+    if(act==='+') changeQty(id, +1);
+    else if(act==='-') changeQty(id, -1);
+    else if(act==='x') changeQty(id, -999);
+  });
+
+  // Apply voucher preview
+  const applyVoucher = ()=>{
+    // only visual note on product page; actual total handled in checkout.js
+  };
+});
+"""
+
+checkout_js = """// Checkout logic — reads from localStorage cart
+const $ = (s, p=document) => p.querySelector(s);
+const $$ = (s, p=document) => [...p.querySelectorAll(s)];
+const rupiah = n => n.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 });
+
+function getCart(){
+  try { return JSON.parse(localStorage.getItem('annisa_cart')) || []; } catch { return []; }
+}
+
+function setDownload(filename, dataObj){
+  const blob = new Blob([JSON.stringify(dataObj, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = $('#downloadOrder');
+  a.href = url;
+  a.download = filename;
+}
+
+function renderSummary(){
+  const cart = getCart();
+  const wrap = $('#summaryItems');
+  wrap.innerHTML = cart.length ? '' : '<p class="muted">Keranjang kosong.</p>';
+  cart.forEach(i=>{
+    const row = document.createElement('div');
+    row.className = 'summary-item';
+    row.innerHTML = `
+      <figure><img src="${i.img}" alt="${i.name}"></figure>
+      <div>
+        <div style="font-weight:700">${i.name}</div>
+        <div class="muted">Qty: ${i.qty}</div>
+      </div>
+      <div style="font-weight:800">${rupiah(i.price*i.qty)}</div>`;
+    wrap.appendChild(row);
+  });
+  const subtotal = cart.reduce((s,i)=> s + i.price*i.qty, 0);
+  const discount = 0; // could implement voucher
+  const total = subtotal - discount;
+  $('#summarySubtotal').textContent = rupiah(subtotal);
+  $('#summaryDiscount').textContent = rupiah(discount);
+  $('#summaryTotal').textContent = rupiah(total);
+  return { cart, subtotal, discount, total };
+}
+
+window.addEventListener('DOMContentLoaded', ()=>{
+  $('#year').textContent = new Date().getFullYear();
+  const totals = renderSummary();
+
+  $('#checkoutForm').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.target).entries());
+    const order = {
+      shop: 'Annisa Dress',
+      createdAt: new Date().toISOString(),
+      customer: data,
+      items: totals.cart,
+      subtotal: totals.subtotal,
+      discount: totals.discount,
+      total: totals.total,
+      note: 'Simulasi checkout (front-end only).'
+    };
+    // Save order JSON for user to download
+    setDownload('pesanan-annisa-dress.json', order);
+    // Clear cart after 'order'
+    localStorage.removeItem('annisa_cart');
+    // Show result section
+    $('#orderResult').hidden = false;
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  });
+});
+"""
+
+# Write files
+files = {
+    "index.html": index_html,
+    "checkout.html": checkout_html,
+    "styles.css": styles_css,
+    "script.js": script_js,
+    "checkout.js": checkout_js
+}
+for name, content in files.items():
+    with open(os.path.join(project_dir, name), "w", encoding="utf-8") as f:
+        f.write(content)
+
+# Create zip
+zip_path = "/mnt/data/annisa-dress-site.zip"
+with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
+    for name in files.keys():
+        z.write(os.path.join(project_dir, name), arcname=name)
+
+zip_path
