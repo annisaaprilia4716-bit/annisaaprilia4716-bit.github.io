@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout — Annisa Dress</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="checkout-page">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html"><span>Annisa</span> Dress</a>
+      <nav class="nav">
+        <a href="index.html#koleksi">Koleksi</a>
+        <a href="index.html#tentang">Tentang</a>
+        <a href="index.html#kontak">Kontak</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section container checkout-grid">
+    <section class="checkout-left">
+      <h1>Checkout</h1>
+      <form id="checkoutForm" class="checkout-form">
+        <label>Nama Lengkap
+          <input required type="text" name="name" placeholder="Nama penerima">
+        </label>
+        <label>No. HP/WhatsApp
+          <input required type="tel" name="phone" placeholder="08xxxxxxxxxx">
+        </label>
+        <label>Alamat Lengkap
+          <textarea required name="address" rows="4" placeholder="Jalan, RT/RW, Kel/Desa, Kec, Kota/Kab, Provinsi, Kode Pos"></textarea>
+        </label>
+        <label>Metode Pembayaran
+          <select name="payment" required>
+            <option value="transfer">Transfer Bank</option>
+            <option value="ewallet">E-Wallet</option>
+            <option value="cod">COD (Bayar di Tempat)</option>
+          </select>
+        </label>
+        <button class="btn-primary" type="submit">Buat Pesanan</button>
+      </form>
+      <p class="muted">* Setelah mengirim, ringkasan pesanan akan ditampilkan dan bisa diunduh.</p>
+    </section>
+
+    <aside class="checkout-right">
+      <h2>Ringkasan Pesanan</h2>
+      <div id="summaryItems" class="summary-items"></div>
+      <div class="cart-total"><span>Subtotal</span><strong id="summarySubtotal">Rp0</strong></div>
+      <div class="cart-total"><span>Diskon</span><strong id="summaryDiscount">Rp0</strong></div>
+      <div class="cart-total grand"><span>Total</span><strong id="summaryTotal">Rp0</strong></div>
+    </aside>
+  </main>
+
+  <section id="orderResult" class="section container order-result" hidden>
+    <h2>Terima kasih! 🎉</h2>
+    <p>Pesanan Anda sudah kami terima. Kami akan menghubungi via WhatsApp untuk konfirmasi pembayaran & pengiriman.</p>
+    <a id="downloadOrder" class="btn-outline" href="#" download>Unduh Ringkasan (JSON)</a>
+    <a class="btn-primary" href="index.html">Kembali ke Beranda</a>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Annisa Dress.</p>
+    </div>
+  </footer>
+
+  <script src="checkout.js"></script>
+</body>
+</html>

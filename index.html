@@ -1,340 +1,141 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Annisa Dress elegant — Koleksi annisa dress</title>
-  <meta name="description" content="koleksi annisa dresss sopan dan elegant ." />
-  <style>
-    /* ====== Reset sederhana ====== */
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%}
-    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;line-height:1.4;color:#222;background:linear-gradient(180deg,#fff 0%,#fff9fb 100%)}
-
-    /* ====== Top bar / Hero ====== */
-    .topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;background:transparent}
-    .brand{display:flex;gap:12px;align-items:center}
-    .logo{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,#ff9a8b,#ffd6a5);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;box-shadow:0 6px 18px rgba(255,154,139,.18)}
-    .brand h1{font-size:18px;color:#222}
-    .brand p{font-size:12px;color:#666}
-
-    .controls{display:flex;gap:12px;align-items:center}
-    .search{padding:8px 12px;border-radius:12px;border:1px solid rgba(34,34,34,.08);min-width:220px;transition:box-shadow .25s}
-    .search:focus{outline:none;box-shadow:0 6px 18px rgba(95,81,205,.12)}
-    .btn{padding:10px 14px;border-radius:12px;border:none;background:#5f51cd;color:#fff;font-weight:600;cursor:pointer;transition:transform .12s ease,box-shadow .12s}
-    .btn:active{transform:translateY(1px)}
-
-    /* ====== Hero ====== */
-    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;padding:36px 32px;align-items:center}
-    .hero-left h2{font-size:28px;margin-bottom:12px;color:#222}
-    .hero-left p{color:#555;margin-bottom:18px}
-    .hero-cta{display:flex;gap:12px}
-
-    .hero-right{background:linear-gradient(180deg,#fff,#fff);padding:18px;border-radius:18px;box-shadow:0 8px 30px rgba(95,81,205,.06)}
-    .highlight{display:flex;gap:12px;align-items:center}
-    .highlight img{width:88px;height:120px;object-fit:cover;border-radius:10px}
-
-    /* ====== Filter bar ====== */
-    .filterbar{display:flex;gap:12px;align-items:center;padding:18px 32px}
-    .chip{padding:8px 12px;background:#fff;border-radius:999px;border:1px solid rgba(34,34,34,.06);cursor:pointer;transition:transform .12s,box-shadow .12s}
-    .chip.active{background:linear-gradient(90deg,#ff9a8b,#ffd6a5);color:#fff;border:none;box-shadow:0 8px 26px rgba(255,154,139,.12);transform:translateY(-4px)}
-
-    /* ====== Grid produk ====== */
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:0 32px 56px}
-    @media (max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:640px){.hero{grid-template-columns:1fr;}.grid{grid-template-columns:1fr;padding:0 18px}}
-
-    .card{background:linear-gradient(180deg,#fff,#fff);border-radius:16px;padding:12px;border:1px solid rgba(34,34,34,.04);box-shadow:0 10px 30px rgba(95,81,205,.03);overflow:hidden;position:relative;transition:transform .28s cubic-bezier(.2,.9,.2,1),box-shadow .28s}
-    .card:hover{transform:translateY(-8px);box-shadow:0 26px 60px rgba(95,81,205,.12)}
-    .thumb{width:100%;height:320px;object-fit:cover;border-radius:12px}
-    .meta{padding:12px 6px;display:flex;justify-content:space-between;align-items:center}
-    .meta .title{font-weight:700}
-    .meta .price{font-weight:700;color:#5f51cd}
-    .tags{display:flex;gap:8px;padding:0 6px 12px}
-    .tag{font-size:12px;padding:6px 8px;border-radius:999px;border:1px solid rgba(34,34,34,.06)}
-
-    .card .actions{display:flex;gap:8px;padding:0 6px 12px}
-    .smallbtn{flex:1;padding:8px 10px;border-radius:10px;border:none;background:transparent;cursor:pointer;border:1px solid rgba(34,34,34,.06);transition:background .12s;}
-    .smallbtn.primary{background:#5f51cd;color:#fff;border:none}
-
-    /* ====== Modal lightbox ====== */
-    .modal-bg{position:fixed;inset:0;background:rgba(14,14,22,.48);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .18s}
-    .modal{width:min(920px,96%);background:#fff;border-radius:16px;padding:18px;box-shadow:0 24px 60px rgba(8,8,16,.36);transform:translateY(16px);transition:transform .18s}
-    .modal.open{transform:translateY(0)}
-    .modal-bg.open{opacity:1;pointer-events:auto}
-    .modal .gallery{display:flex;gap:12px}
-    .gallery .big{flex:1}
-    .gallery .thumbs{width:120px;display:flex;flex-direction:column;gap:8px}
-    .gallery img{width:100%;border-radius:12px;object-fit:cover}
-
-    /* ====== Micro-animations ====== */
-    @keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
-    .logo{animation:floaty 4s ease-in-out infinite}
-
-    /* ====== Footer ====== */
-    footer{padding:28px 32px;text-align:center;color:#666}
-
-    /* ====== Empty / responsive tweaks ====== */
-    .no-select{user-select:none}
-
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Annisa Dress — Koleksi Dress Kekinian</title>
+  <meta name="description" content="Annisa Dress: koleksi dress kekinian, elegan & sopan dengan nuansa pastel.">
+  <link rel="preconnect" href="https://images.unsplash.com" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>👗</text></svg>">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <div class="logo">AD</div>
-      <div>
-        <h1>Annisa Dress</h1>
-        <p>Elegan — Sopan — Cerah</p>
-      </div>
-    </div>
-
-    <div class="controls">
-      <input class="search" id="search" placeholder="Cari mis. 'gamis', 'warna merah'" />
-      <button class="btn" id="cartBtn">Keranjang (0)</button>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#"><span>Annisa</span> Dress</a>
+      <nav class="nav">
+        <a href="#koleksi">Koleksi</a>
+        <a href="#tentang">Tentang</a>
+        <a href="#kontak">Kontak</a>
+      </nav>
+      <button id="btnCart" class="cart-btn" aria-label="Buka Keranjang">
+        <span class="icon">🛒</span>
+        <span id="cartCount" class="count-badge">0</span>
+      </button>
     </div>
   </header>
 
+  <!-- Hero Slider -->
   <section class="hero">
-    <div class="hero-left">
-      <h2>Koleksi Pilihan Annisa Dress</h2>
-      <p>Temukan baju yang elegan, sopan, dan cocok untuk berbagai acara. Warna cerah dan bahan nyaman — disusun rapi agar mudah dipilih.</p>
-      <div class="hero-cta">
-        <button class="btn" id="shopNow">Belanja Sekarang</button>
-        <button class="chip" id="lihatPromo">Promo Terbaru</button>
-      </div>
-      <div style="margin-top:18px;display:flex;gap:12px;align-items:center">
-        <div style="display:flex;gap:8px;align-items:center">
-          <strong style="color:#5f51cd">Gratis ongkir</strong>
-          <span style="color:#777;font-size:13px">untuk pembelian tertentu</span>
+    <div class="slider" aria-roledescription="carousel">
+      <div class="slides" id="slides">
+        <div class="slide is-active" style="--bg:url('https://images.unsplash.com/photo-1549366021-9f761d450615?q=80&w=1600&auto=format&fit=crop');">
+          <div class="slide-content">
+            <h1>Dress Kekinian • Elegan & Sopan</h1>
+            <p>Nuansa pink & hijau pastel, nyaman dipakai harian hingga acara spesial.</p>
+            <a class="btn-primary" href="#koleksi">Lihat Koleksi</a>
+          </div>
         </div>
+        <div class="slide" style="--bg:url('https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1600&auto=format&fit=crop');">
+          <div class="slide-content">
+            <h1>Kualitas Premium</h1>
+            <p>Bahan adem, potongan rapi, dan detail yang manis.</p>
+            <a class="btn-primary" href="#koleksi">Belanja Sekarang</a>
+          </div>
+        </div>
+        <div class="slide" style="--bg:url('https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?q=80&w=1600&auto=format&fit=crop');">
+          <div class="slide-content">
+            <h1>Annisa Dress</h1>
+            <p>Toko resmi milik Anda — tampil percaya diri setiap hari.</p>
+            <a class="btn-primary" href="#koleksi">Mulai</a>
+          </div>
+        </div>
+      </div>
+      <div class="slider-controls">
+        <button id="prevSlide" aria-label="Sebelumnya">‹</button>
+        <div id="dots" class="dots" aria-label="Navigasi slide"></div>
+        <button id="nextSlide" aria-label="Berikutnya">›</button>
       </div>
     </div>
-
-    <aside class="hero-right">
-      <div class="highlight">
-        <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=4a1a8e0b6f9f6e2c7d4a8d3b0f1c6e12" alt="Model" />
-        <div>
-          <strong>Gamis Premium</strong>
-          <p style="color:#666;font-size:13px;margin-top:6px">Potongan modern, bahan lembut, warna pastel & cerah.</p>
-          <div style="margin-top:8px"><span class="chip">Satin</span> <span class="chip">Sopan</span></div>
-        </div>
-      </div>
-    </aside>
   </section>
 
-  <section class="filterbar">
-    <button class="chip active" data-filter="all">Semua</button>
-    <button class="chip" data-filter="gamis">Gamis</button>
-    <button class="chip" data-filter="dress">Dress</button>
-    <button class="chip" data-filter="setelan">Setelan</button>
-    <div style="flex:1"></div>
-    <select id="sort" class="chip">
-      <option value="popular">Terpopuler</option>
-      <option value="price-asc">Harga: Rendah ke Tinggi</option>
-      <option value="price-desc">Harga: Tinggi ke Rendah</option>
-    </select>
+  <!-- Koleksi -->
+  <section id="koleksi" class="section container">
+    <header class="section-head">
+      <h2>Koleksi Terbaru</h2>
+      <p>Dress pastel kekinian pilihan terbaik untukmu.</p>
+      <div class="filters">
+        <input id="searchInput" type="search" placeholder="Cari model / warna..." />
+        <select id="sortSelect" aria-label="Urutkan">
+          <option value="recommended">Rekomendasi</option>
+          <option value="price-asc">Harga: termurah</option>
+          <option value="price-desc">Harga: termahal</option>
+          <option value="name-asc">Nama: A–Z</option>
+          <option value="name-desc">Nama: Z–A</option>
+        </select>
+      </div>
+    </header>
+    <div id="productGrid" class="grid"></div>
   </section>
 
-  <main>
-    <section class="grid" id="grid">
-      <!-- Card produk akan di-generate oleh JavaScript -->
-    </section>
-  </main>
-
-  <!-- Modal product detail -->
-  <div class="modal-bg" id="modalBg" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true">
-      <button id="closeModal" class="smallbtn" style="float:right">Tutup</button>
-      <div class="gallery" style="margin-top:12px">
-        <div class="big"><img id="modalImg" src="" alt="Detail produk" style="height:420px;width:100%;object-fit:cover;border-radius:12px"/></div>
-        <div class="thumbs" id="modalThumbs"></div>
+  <!-- Tentang -->
+  <section id="tentang" class="section about">
+    <div class="container about-inner">
+      <div class="about-text">
+        <h2>Tentang Annisa Dress</h2>
+        <p>Annisa Dress adalah butik online dengan kurasi dress elegan & sopan bergaya kekinian. Kami mengutamakan bahan nyaman, cutting rapi, dan warna pastel yang menenangkan.</p>
+        <ul>
+          <li>✦ Desain modern, tampilan anggun</li>
+          <li>✦ Bahan adem & tahan lama</li>
+          <li>✦ Pengiriman cepat & aman</li>
+        </ul>
       </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
-        <div>
-          <h3 id="modalTitle">Judul</h3>
-          <p id="modalDesc" style="color:#666;font-size:14px">Deskripsi singkat</p>
-        </div>
-        <div style="text-align:right">
-          <div style="font-weight:800;color:#5f51cd;font-size:18px" id="modalPrice">Rp 0</div>
-          <button class="btn" id="addCartModal" style="margin-top:8px">Tambah ke Keranjang</button>
-        </div>
+      <div class="about-card">
+        <h3>Promo Spesial</h3>
+        <p>Diskon 10% untuk pembelian pertama. Gunakan kode: <strong>ANNISA10</strong></p>
+        <a class="btn-outline" href="#koleksi">Belanja Sekarang</a>
       </div>
     </div>
-  </div>
+  </section>
 
-  <footer>
-    © Annisa Dress — Tampilan contoh. Butuh perubahan? Saya bantu desain ulang.
+  <!-- Kontak -->
+  <section id="kontak" class="section contact container">
+    <h2>Kontak</h2>
+    <p>Butuh bantuan? Hubungi kami via WhatsApp atau email, tim kami siap membantu.</p>
+    <div class="contact-actions">
+      <a class="btn-primary" href="https://wa.me/6281234567890" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn-outline" href="mailto:halo@annisa-dress.example">Email</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Annisa Dress — Semua Hak Dilindungi.</p>
+      <a class="btn-ghost" href="checkout.html">Checkout</a>
+    </div>
   </footer>
 
-  <script>
-    // ====== Data produk (contoh) ======
-    const products = [
-      {id:1,title:'Gamis Pastel Premium',category:'gamis',price:249000,colors:['pink','mint'],img:'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=4a1a8e0b6f9f6e2c7d4a8d3b0f1c6e12',desc:'Gamis potongan A-line, bahan satin lembut, cocok untuk acara formal & santai.',gallery:[]},
-      {id:2,title:'Dress Maxi Sopan',category:'dress',price:199000,colors:['cream','navy'],img:'https://images.unsplash.com/photo-1495121605193-b116b5b09a6a?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=6a1f2d9b3c4f5f6a7b8c9d0e',desc:'Maxi dress polos dengan detail lipit pada pinggang, elegan dan sopan.',gallery:[]},
-      {id:3,title:'Setelan Blouse & Rok',category:'setelan',price:159000,colors:['peach','olive'],img:'https://images.unsplash.com/photo-1520975912363-3a0e1d1e4f5b?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=2c3d4e5f6a7b8c9d0e1f2a3b',desc:'Setelan nyaman untuk acara keluarga atau kerja.',gallery:[]},
-      {id:4,title:'Gamis Ceria Anak Muda',category:'gamis',price:139000,colors:['mustard','pink'],img:'https://images.unsplash.com/photo-1503342452485-86f7a4f62c28?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=d4c3b2a1e0f123456789abcd',desc:'Potongan kasual dengan sentuhan modis untuk suasana santai.',gallery:[]},
-      {id:5,title:'Dress Pesta Sopan',category:'dress',price:289000,colors:['maroon','gold'],img:'https://images.unsplash.com/photo-1520975922710-6e4c9f1f0b2a?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=abcdef1234567890abcdef12',desc:'Dress mewah untuk acara pesta, lining penuh dan detail payet halus.',gallery:[]},
-      {id:6,title:'Setelan Cotton Premium',category:'setelan',price:129000,colors:['white','sky'],img:'https://images.unsplash.com/photo-1521120098172-1912e7b1f2f7?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=0a1b2c3d4e5f6a7b8c9d0e1f',desc:'Setelan kerja bahan cotton breathable, simpel dan rapi.',gallery:[]}
-    ];
+  <!-- Keranjang Drawer -->
+  <aside id="cartDrawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-header">
+      <h3>Keranjang</h3>
+      <button id="closeCart" aria-label="Tutup">✕</button>
+    </div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-bottom">
+      <div class="cart-total"><span>Subtotal</span><strong id="cartSubtotal">Rp0</strong></div>
+      <div class="cart-actions">
+        <a class="btn-outline" href="checkout.html">Checkout</a>
+        <button id="clearCart" class="btn-ghost">Bersihkan</button>
+      </div>
+    </div>
+  </aside>
 
-    // isi gallery sama gambar alternatif (utk modal)
-    products.forEach(p=>{
-      p.gallery = [p.img, p.img.replace('w=1200','w=800'), p.img.replace('w=1200','w=600')];
-    });
+  <!-- Overlay -->
+  <div id="overlay" class="overlay" hidden></div>
 
-    const grid = document.getElementById('grid');
-    const chipBtns = document.querySelectorAll('.chip[data-filter]');
-    const searchInput = document.getElementById('search');
-    const sortSelect = document.getElementById('sort');
-    const cartBtn = document.getElementById('cartBtn');
-    const modalBg = document.getElementById('modalBg');
-    const modalImg = document.getElementById('modalImg');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalDesc = document.getElementById('modalDesc');
-    const modalPrice = document.getElementById('modalPrice');
-    const modalThumbs = document.getElementById('modalThumbs');
-    const addCartModal = document.getElementById('addCartModal');
-    const closeModal = document.getElementById('closeModal');
-
-    let cart = [];
-    let currentFilter = 'all';
-    let currentQuery = '';
-
-    function formatRp(n){ return 'Rp ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
-
-    function renderGrid(list){
-      grid.innerHTML = '';
-      if(list.length===0){ grid.innerHTML = '<div style="padding:40px;text-align:center;color:#666;width:100%">Tidak ada produk ditemukan</div>'; return }
-      list.forEach(p=>{
-        const card = document.createElement('article'); card.className='card'; card.innerHTML = `
-          <img class="thumb" alt="${p.title}" src="${p.img}" loading="lazy" />
-          <div class="meta">
-            <div>
-              <div class="title">${p.title}</div>
-              <div style="font-size:13px;color:#777">${p.category} • ${p.colors.join(', ')}</div>
-            </div>
-            <div class="price">${formatRp(p.price)}</div>
-          </div>
-          <div class="tags">
-            <div class="tag">Sopan</div>
-            <div class="tag">Elegan</div>
-          </div>
-          <div class="actions">
-            <button class="smallbtn" data-id="${p.id}" aria-label="Lihat detail">Detail</button>
-            <button class="smallbtn primary" data-buy="${p.id}">Beli</button>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function applyFilters(){
-      let out = products.slice();
-      if(currentFilter!=='all') out = out.filter(p=>p.category===currentFilter);
-      if(currentQuery.trim()!==''){
-        const q = currentQuery.toLowerCase();
-        out = out.filter(p=> (p.title+ ' ' + p.desc + ' ' + p.colors.join(' ')).toLowerCase().includes(q));
-      }
-      // sorting
-      const sort = sortSelect.value;
-      if(sort==='price-asc') out.sort((a,b)=>a.price-b.price);
-      if(sort==='price-desc') out.sort((a,b)=>b.price-a.price);
-      if(sort==='popular') out.sort((a,b)=>a.id-b.id); // contoh: id lama = lebih populer
-      renderGrid(out);
-    }
-
-    // event: chip filter
-    chipBtns.forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        chipBtns.forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        currentFilter = btn.dataset.filter;
-        applyFilters();
-      });
-    });
-
-    // search
-    searchInput.addEventListener('input',e=>{
-      currentQuery = e.target.value;
-      applyFilters();
-    });
-
-    sortSelect.addEventListener('change',applyFilters);
-
-    // delegasi klik pada grid untuk tombol detail & beli
-    grid.addEventListener('click',e=>{
-      const detailBtn = e.target.closest('[data-id]');
-      const buyBtn = e.target.closest('[data-buy]');
-      if(detailBtn){
-        const id = Number(detailBtn.dataset.id);
-        openModal(id);
-      }
-      if(buyBtn){
-        const id = Number(buyBtn.dataset.buy);
-        addToCart(id);
-      }
-    });
-
-    function openModal(id){
-      const p = products.find(x=>x.id===id);
-      if(!p) return;
-      modalImg.src = p.gallery[0];
-      modalTitle.textContent = p.title;
-      modalDesc.textContent = p.desc;
-      modalPrice.textContent = formatRp(p.price);
-      modalThumbs.innerHTML = '';
-      p.gallery.forEach(src=>{
-        const im = document.createElement('img'); im.src=src; im.loading='lazy'; im.style.cursor='pointer';
-        im.addEventListener('click',()=> modalImg.src = src);
-        modalThumbs.appendChild(im);
-      });
-      modalBg.classList.add('open');
-      document.body.style.overflow='hidden';
-      modalBg.setAttribute('aria-hidden','false');
-
-      addCartModal.onclick = ()=>{ addToCart(p.id); closeModalFn(); }
-    }
-
-    function closeModalFn(){ modalBg.classList.remove('open'); document.body.style.overflow=''; modalBg.setAttribute('aria-hidden','true'); }
-    closeModal.addEventListener('click',closeModalFn);
-    modalBg.addEventListener('click',e=>{ if(e.target===modalBg) closeModalFn(); });
-
-    function addToCart(id){
-      const p = products.find(x=>x.id===id);
-      if(!p) return;
-      cart.push({id:p.id,title:p.title,price:p.price});
-      cartBtn.textContent = `Keranjang (${cart.length})`;
-      // efek kecil
-      cartBtn.animate([{transform:'scale(1.05)'},{transform:'scale(1)'}],{duration:220});
-      // toast sederhana
-      showToast(`${p.title} ditambahkan ke keranjang`);
-    }
-
-    // tombol keranjang
-    cartBtn.addEventListener('click',()=>{
-      if(cart.length===0) return showToast('Keranjang kosong');
-      const total = cart.reduce((s,i)=>s+i.price,0);
-      alert(`Isi keranjang:\n- ${cart.map(i=>i.title).join('\n- ')}\n\nTotal: ${formatRp(total)}`);
-    });
-
-    // shop now
-    document.getElementById('shopNow').addEventListener('click',()=>{
-      window.scrollTo({top:document.querySelector('.grid').offsetTop-12,behavior:'smooth'});
-    });
-
-    // simple toast
-    function showToast(msg){
-      const el = document.createElement('div');
-      el.textContent = msg;
-      el.style.position='fixed';el.style.right='20px';el.style.bottom='20px';el.style.background='rgba(34,34,34,.9)';el.style.color='#fff';el.style.padding='10px 14px';el.style.borderRadius='10px';el.style.zIndex=9999;el.style.boxShadow='0 8px 26px rgba(0,0,0,.28)';
-      document.body.appendChild(el);
-      setTimeout(()=>{ el.style.transition='opacity .4s'; el.style.opacity='0'; setTimeout(()=>el.remove(),420); },1800);
-    }
-
-    // inisialisasi awal
-    applyFilters();
-
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
